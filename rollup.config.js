@@ -3,12 +3,15 @@ import resolve from "@rollup/plugin-node-resolve";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import pkg from "./package.json";
 import scss from "rollup-plugin-scss";
+import fs from "fs";
 
 // Array of extensions to be handled by babel
 const EXTENSIONS = [".ts", ".tsx"];
 
 // Excluded dependencies - dev dependencies
 const EXTERNAL = [...Object.keys(pkg.devDependencies)];
+
+const dirs = fs.readdirSync("./src/");
 
 export default {
   input: ["src/index.ts"], // What files we build?

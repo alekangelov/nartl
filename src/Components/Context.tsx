@@ -1,27 +1,25 @@
-import { ToastType } from "core/EventManager";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { ActionTypes, IStore, NartlOptions } from "../types";
+import store from "../core/store";
+import { setOptions } from "../core/actions";
 
-export interface NartlOptions {
-  timeout?: number;
-  autoClose?: boolean;
-  defaultLevel?: ToastType;
-}
-
-const initialState = {
-  timeout: 3000,
-  autoClose: true,
-  defaultLevel: "info",
-} as NartlOptions;
-
-const NartlContext = React.createContext(initialState);
+const NartlContext = React.createContext<IStore | undefined>(undefined);
 
 export const useNartlContext = () => React.useContext(NartlContext);
 
-export const NartlProvider: React.FC<{ options?: NartlOptions }> = ({
+export const NartlProvider: React.FC<{ options?: Partial<NartlOptions> }> = ({
   children,
   options,
-}) => (
-  <NartlContext.Provider value={{ ...initialState, ...options }}>
-    {children}
-  </NartlContext.Provider>
-);
+}) => {
+  const storeRef = useRef(store);
+  useEffect(() => {
+    if (storeRef.current && options) {
+      storeRef.current.dispatch(setOptions(options));
+    }
+  }, [storeRef.current, options]);
+  return (
+    <NartlContext.Provider value={storeRef.current}>
+      {children}
+    </NartlContext.Provider>
+  );
+};

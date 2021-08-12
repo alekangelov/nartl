@@ -1,14 +1,33 @@
+import { IToast, ActionTypes } from "../types";
 import { randomId } from "../utils/common";
-import EventManager, { Toast } from "./EventManager";
+import store from "./store";
 
-export const toast = (props: string | Toast) => {
-  let toastProps = {} as Toast;
-  if (typeof props === "string") {
-    toastProps.message = props;
-    toastProps.type = "info";
-  } else {
-    toastProps = props;
+class Toast implements IToast {
+  animationDuration: number = 500;
+  id: string = randomId();
+  message: string;
+  level: IToast["level"] = "info";
+  state: IToast["state"] = "entering";
+  timeout: number = 3000;
+  setState: (state: IToast["state"]) => void = (state) => {
+    this.state = state;
+  };
+  constructor(props?: Partial<IToast>) {
+    Object.assign(this, props || {});
   }
-  toastProps.id = randomId();
-  return EventManager.add(toastProps);
+}
+
+export const toast = (props: Partial<IToast> | string) => {
+  if (typeof props === "string") {
+    return store.dispatch({
+      type: ActionTypes.ADD_TOAST,
+      payload: new Toast({
+        message: props,
+      }),
+    });
+  }
+  store.dispatch({
+    type: ActionTypes.ADD_TOAST,
+    payload: new Toast(props),
+  });
 };

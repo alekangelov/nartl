@@ -12,7 +12,6 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
-    "baseUrl": "./src/",
     "outDir": "./dist",
     "composite": true,
     "declarationDir": "./dist"

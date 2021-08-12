@@ -1,6 +1,7 @@
 import React from "react";
 import NartlContainer from "./NartlContainer";
-import { NartlOptions, NartlProvider as NartlProviderContext } from "./Context";
+import { NartlProvider as NartlProviderContext } from "./Context";
+import { NartlOptions } from "../types";
 
 const NartlProvider: React.FC<{ options?: NartlOptions }> = ({
   options,

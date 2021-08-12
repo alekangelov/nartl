@@ -1,8 +1,10 @@
-import { Toast as ToastProps } from "../core/EventManager";
 import React from "react";
+import { IToast } from "../types";
+import useTransition from "../utils/useTransition";
 
-const Toast = (props: ToastProps) => {
-  return <div>jakoto</div>;
+const Toast = (props: IToast) => {
+  console.log(props.state);
+  return <div>{props.message}</div>;
 };
 
 export default Toast;

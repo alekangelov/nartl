@@ -1,8 +1,8 @@
-import EventManager, { Toast as ToastProps } from "../core/EventManager";
 import React, { useEffect, useState } from "react";
 import { clsx } from "../utils/clsx";
 import Toast from "./Toast";
 import { useNartlContext } from "./Context";
+import { IToast } from "../types";
 
 interface Props {
   position?:
@@ -15,16 +15,15 @@ interface Props {
 }
 
 const NartlContainer = (props: Props) => {
-  const [state, setState] = useState<ToastProps[]>([]);
-  const options = useNartlContext();
+  const [state, setState] = useState<IToast[]>([]);
+  const store = useNartlContext();
   useEffect(() => {
-    EventManager.setOptions(options);
-    EventManager.subscribe(setState);
+    const onSubscribe = () => setState(store?.getState().toasts || []);
+    store?.subscribe(onSubscribe);
     return () => {
-      EventManager.unsubscribe(setState);
+      store?.unsubscribe(onSubscribe);
     };
   }, []);
-  console.log({ state });
   return (
     <div className={clsx("nartl-container", props.position)}>
       {state.map((e) => (
