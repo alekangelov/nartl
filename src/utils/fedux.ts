@@ -22,6 +22,8 @@ type Reducer<S extends any, F extends Action = ActionWithPayload> = (
   action: F
 ) => S;
 
+// looks like I made redux 🤷‍♂️
+
 function createStore<
   S,
   SX extends Subscriber<S> = Subscriber<S>,
