@@ -10,8 +10,9 @@
   "scripts": {
     "build": "rimraf dist && tsc && rollup --config",
     "start:demo": "cd demo && yarn start",
-    "dev": "concurrently 'yarn build --watch' 'yarn start:demo'",
-    "tsc": "tsc"
+    "dev": "yarn concurrently 'yarn build --watch' 'yarn start:demo'",
+    "tsc": "tsc",
+    "size": "yarn build && node ./getSize.js"
   },
   "peerDependencies": {
     "react": ">=16.8",
@@ -27,6 +28,7 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/react": "^17.0.17",
     "concurrently": "^6.2.1",
+    "minified-size": "^2.3.0",
     "node-sass": "^6.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
