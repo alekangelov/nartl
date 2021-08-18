@@ -13,7 +13,7 @@ interface AnyAction extends Action {
   [extraProps: string]: any;
 }
 
-interface ActionWithPayload extends AnyAction {
+export interface ActionWithPayload extends AnyAction {
   payload?: any;
 }
 
@@ -28,7 +28,15 @@ function createStore<
   S,
   SX extends Subscriber<S> = Subscriber<S>,
   A extends Action = ActionWithPayload
->(reducer: Reducer<S | undefined, A>) {
+>(
+  reducer: Reducer<S | undefined, A>
+): {
+  subscribe: (subscriber: SX) => () => void;
+  unsubscribe: (subscriber: SX) => void;
+  notify: (nextState: S) => void;
+  dispatch: (action: A) => S;
+  getState: () => S;
+} {
   const listeners: SX[] = [];
   let state = reducer(undefined, { type: "@INIT" } as A);
 

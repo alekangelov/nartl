@@ -7,16 +7,15 @@ function App() {
   const [state, setState] = useState(0);
   return (
     <div className="App">
-      <NartlProvider options={{ timeout: 50, position: "bottom-right" }}>
-        <button
-          onClick={() => {
-            toast(`this is the ${state} toast`);
-            setState((state) => state + 1);
-          }}
-        >
-          success
-        </button>
-      </NartlProvider>
+      <button
+        onClick={() => {
+          toast(`this is the ${state} toast`);
+          setState((state) => state + 1);
+        }}
+      >
+        success
+      </button>
+      <NartlProvider position={"top-right"} />
     </div>
   );
 }
