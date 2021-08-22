@@ -17,9 +17,19 @@ const initialState: IState = {
 export const store = createStore<typeof initialState>(
   (state = initialState, action: Actions) => {
     if (action.type === ActionType.ADD_TOAST) {
+      const newToast = {
+        ...action.payload,
+        animationDuration:
+          action.payload.animationDuration || state.options.animationDuration,
+        timeout: action.payload.timeout || state.options.timeout,
+      };
+      const newToasts = [...state.toasts, newToast];
+      if (newToasts.length > state.options.maxToasts) {
+        newToasts.length = state.options.maxToasts;
+      }
       return {
         ...state,
-        toasts: [...state.toasts, action.payload],
+        toasts: newToasts,
       };
     }
     if (action.type === ActionType.REMOVE_TOAST) {
@@ -71,7 +81,7 @@ export const useToasts = () => {
 };
 
 export const useNartlStore = () => {
-  const [state, setState] = useState<Partial<IState>>({});
+  const [state, setState] = useState<IState>({} as IState);
   const store = useStore();
   useEffect(() => {
     const unsubscribe = store.subscribe(() => setState(store.getState()));

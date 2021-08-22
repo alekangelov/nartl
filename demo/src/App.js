@@ -15,7 +15,11 @@ function App() {
       >
         success
       </button>
-      <NartlProvider position={"top-right"} />
+      <NartlProvider
+        // animationDuration={5000}
+        // timeout={30000}
+        position={"top-right"}
+      />
     </div>
   );
 }

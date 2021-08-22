@@ -3,13 +3,14 @@ import { encapId } from "../utils/common";
 import { addToast } from "./actions";
 import { store } from "./store";
 
-const getInitialToast: () => Toast = () => ({
+const getInitialToast: () => Partial<Toast> = () => ({
   id: encapId(),
   message: "",
   type: "info",
-  timeout: 5000,
-  animationDuration: 500,
+  timeout: undefined,
+  animationDuration: undefined,
   height: 0,
+  state: "entering",
   close: () => {},
 });
 

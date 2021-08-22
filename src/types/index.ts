@@ -20,7 +20,7 @@ export type NartlOptions = {
 export const initialOptions: NartlOptions = {
   autoClose: true,
   timeout: 5000,
-  maxToasts: 20,
+  maxToasts: 10,
   animationDuration: 500,
   position: "bottom-right",
   gutter: 16,
@@ -33,6 +33,7 @@ export type Toast = {
   animationDuration: number;
   type: ToastType;
   height: number;
+  state: ToastState;
   close: () => any;
 };
 
@@ -66,3 +67,5 @@ export type Actions =
       payload: Toast;
     };
 export type AnyObject = Record<any, any>;
+
+export type ToastState = "entering" | "entered" | "exiting" | "exited";
