@@ -23,7 +23,7 @@ export const store = createStore<typeof initialState>(
           action.payload.animationDuration || state.options.animationDuration,
         timeout: action.payload.timeout || state.options.timeout,
       };
-      const newToasts = [...state.toasts, newToast];
+      const newToasts = [newToast, ...state.toasts];
       if (newToasts.length > state.options.maxToasts) {
         newToasts.length = state.options.maxToasts;
       }

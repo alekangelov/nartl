@@ -71,9 +71,10 @@ const Toast: React.FC<IToast> = (props) => {
         transition: `max-height ${props.animationDuration}ms`,
 
         willChange: "max-height",
-        ...(props.state === "exiting"
-          ? { pointerEvents: "none" }
-          : { maxHeight: `${bounds.height || 300}px` }),
+        ...(props.state === "exiting" && { pointerEvents: "none" }),
+        ...(props.state === "entered" && {
+          maxHeight: `${bounds.height || 300}px`,
+        }),
       }}
     >
       <div className="toast-message">{props.message}</div>
