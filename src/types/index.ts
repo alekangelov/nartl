@@ -1,3 +1,5 @@
+import React from "react";
+
 export type ToastPoistion =
   | "top-left"
   | "top-center"
@@ -28,7 +30,7 @@ export const initialOptions: NartlOptions = {
 
 export type Toast = {
   id: number;
-  message: string;
+  message: string | JSX.Element;
   timeout: number;
   animationDuration: number;
   type: ToastType;

@@ -1,3 +1,4 @@
+import React from "react";
 import { ActionType, Toast } from "../types";
 import { encapId } from "../utils/common";
 import { addToast } from "./actions";
@@ -14,31 +15,37 @@ const getInitialToast: () => Partial<Toast> = () => ({
   close: () => {},
 });
 
-export const toast = (props: Partial<Toast> | string) => {
+export const toast = (
+  props: Partial<Toast> | string | ((props: Partial<Toast>) => JSX.Element)
+) => {
   const options = () => {
     const initialToast = getInitialToast();
+    const close = () => {
+      store.dispatch({
+        type: ActionType.UPDATE_TOAST,
+        payload: { id: initialToast.id, state: "exiting" },
+      });
+    };
+    const update = (__toast: Partial<Toast>) => {
+      store.dispatch({
+        type: ActionType.UPDATE_TOAST,
+        payload: { id: initialToast.id, ...__toast },
+      });
+    };
     if (typeof props === "string") {
       return {
         ...initialToast,
         message: props,
       };
     }
-    return { ...initialToast, ...props };
+    if (typeof props === "function") {
+      return {
+        ...initialToast,
+        message: props({ ...initialToast, close }),
+      };
+    }
+    return { ...initialToast, ...props, close, update };
   };
   const toastProps = options();
-  const close = () => {
-    store.dispatch({
-      type: ActionType.UPDATE_TOAST,
-      payload: { id: toastProps.id, state: "exiting" },
-    });
-  };
-  const update = (__toast: Partial<Toast>) => {
-    store.dispatch({
-      type: ActionType.UPDATE_TOAST,
-      payload: { id: toastProps.id, ...__toast },
-    });
-  };
-  addToast({ ...toastProps, close })(store.dispatch);
-
-  return { close, update };
+  addToast({ ...toastProps })(store.dispatch);
 };

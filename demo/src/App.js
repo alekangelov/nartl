@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <button
         onClick={() => {
-          toast(`this is the ${state} toast`);
+          toast(() => <div>Jakoto {state}</div>);
           setState((state) => state + 1);
         }}
       >
