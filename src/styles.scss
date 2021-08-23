@@ -65,7 +65,10 @@
   }
   &.entering {
     animation: entering;
+  }
+  &.none {
     max-height: 0px;
+    opacity: 0;
   }
   &.exiting {
     animation: exiting;

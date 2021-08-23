@@ -1,4 +1,4 @@
-import { Toast } from "../types";
+import { ActionType, Toast } from "../types";
 import { encapId } from "../utils/common";
 import { addToast } from "./actions";
 import { store } from "./store";
@@ -10,7 +10,7 @@ const getInitialToast: () => Partial<Toast> = () => ({
   timeout: undefined,
   animationDuration: undefined,
   height: 0,
-  state: "entering",
+  state: "none",
   close: () => {},
 });
 
@@ -25,5 +25,19 @@ export const toast = (props: Partial<Toast> | string) => {
     }
     return { ...initialToast, ...props };
   };
-  addToast(options())(store.dispatch);
+  const toastProps = options();
+  addToast(toastProps)(store.dispatch);
+  const close = () => {
+    store.dispatch({
+      type: ActionType.UPDATE_TOAST,
+      payload: { id: toastProps.id, state: "exiting" },
+    });
+  };
+  const update = (__toast: Partial<Toast>) => {
+    store.dispatch({
+      type: ActionType.UPDATE_TOAST,
+      payload: { id: toastProps.id, ...__toast },
+    });
+  };
+  return { close, update };
 };

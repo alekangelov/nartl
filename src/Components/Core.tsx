@@ -33,7 +33,7 @@ const Toast: React.FC<IToast> = (props) => {
         type: ActionType.REMOVE_TOAST,
         payload: props,
       });
-    }, props.animationDuration - 5);
+    }, props.animationDuration - 10);
   }, []);
   const queueExit = React.useCallback(() => {
     clearAnimation();
@@ -48,17 +48,38 @@ const Toast: React.FC<IToast> = (props) => {
         type: ActionType.UPDATE_TOAST,
         payload: {
           ...props,
-          state: "entered",
+          state: "entering",
         },
       });
-      queueExit();
-    }, props.animationDuration);
+      timeout.current = setTimeout(() => {
+        dispatch({
+          type: ActionType.UPDATE_TOAST,
+          payload: {
+            ...props,
+            state: "entered",
+          },
+        });
+        queueExit();
+      }, props.animationDuration);
+    }, 50);
   }, []);
+  React.useEffect(() => {
+    const { state } = props;
+    if (state === "none") {
+      queueLifecycle();
+    }
+    if (state === "entered") {
+      queueExit();
+    }
+    if (state === "exiting") {
+      onExit();
+    }
+    return () => clearAnimation();
+  }, [props.state]);
   React.useEffect(() => {
     queueLifecycle();
     return clearAnimation;
   }, []);
-  console.log(bounds);
   return (
     <div
       ref={ref}
@@ -72,7 +93,7 @@ const Toast: React.FC<IToast> = (props) => {
 
         willChange: "max-height",
         ...(props.state === "exiting" && { pointerEvents: "none" }),
-        ...(props.state === "entered" && {
+        ...((props.state === "entered" || props.state === "entering") && {
           maxHeight: `${bounds.height || 300}px`,
         }),
       }}

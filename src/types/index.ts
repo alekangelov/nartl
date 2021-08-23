@@ -68,4 +68,4 @@ export type Actions =
     };
 export type AnyObject = Record<any, any>;
 
-export type ToastState = "entering" | "entered" | "exiting" | "exited";
+export type ToastState = "none" | "entering" | "entered" | "exiting" | "exited";
