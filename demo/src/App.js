@@ -1,7 +1,12 @@
 import "./App.css";
-import { NartlProvider, toast } from "nartl";
+import { NartlProvider, toast, makeToast } from "nartl";
 import "nartl/dist/index.css";
 import { useState } from "react";
+
+const customToast = makeToast((props) => {
+  console.log({ props });
+  return <div className="customToast">{props.message}</div>;
+});
 
 function App() {
   const [state, setState] = useState(0);
@@ -9,7 +14,7 @@ function App() {
     <div className="App">
       <button
         onClick={() => {
-          toast(() => <div>Jakoto {state}</div>);
+          customToast(`some custom toast ${state}`);
           setState((state) => state + 1);
         }}
       >

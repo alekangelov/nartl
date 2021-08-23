@@ -1,5 +1,5 @@
 import { NartlProvider } from "./Components/Core";
-import { toast } from "./core/toast";
+import { toast, makeToast } from "./core/toast";
 import "./styles.scss";
 
-export { NartlProvider, toast };
+export { NartlProvider, toast, makeToast };

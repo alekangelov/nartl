@@ -15,37 +15,55 @@ const getInitialToast: () => Partial<Toast> = () => ({
   close: () => {},
 });
 
-export const toast = (
-  props: Partial<Toast> | string | ((props: Partial<Toast>) => JSX.Element)
-) => {
-  const options = () => {
-    const initialToast = getInitialToast();
-    const close = () => {
-      store.dispatch({
-        type: ActionType.UPDATE_TOAST,
-        payload: { id: initialToast.id, state: "exiting" },
-      });
-    };
-    const update = (__toast: Partial<Toast>) => {
-      store.dispatch({
-        type: ActionType.UPDATE_TOAST,
-        payload: { id: initialToast.id, ...__toast },
-      });
-    };
-    if (typeof props === "string") {
-      return {
-        ...initialToast,
-        message: props,
-      };
-    }
-    if (typeof props === "function") {
-      return {
-        ...initialToast,
-        message: props({ ...initialToast, close }),
-      };
-    }
-    return { ...initialToast, ...props, close, update };
+type ToastFN = (props: Partial<Toast>) => JSX.Element;
+
+type ToastProps = Partial<Toast> | string | ToastFN;
+
+const getOptions = (props: ToastProps) => {
+  const initialToast = getInitialToast();
+  const close = () => {
+    store.dispatch({
+      type: ActionType.UPDATE_TOAST,
+      payload: { id: initialToast.id, state: "exiting" },
+    });
   };
-  const toastProps = options();
+  const update = (__toast: Partial<Toast>) => {
+    store.dispatch({
+      type: ActionType.UPDATE_TOAST,
+      payload: { id: initialToast.id, ...__toast },
+    });
+  };
+  const methods = { close, update };
+  if (typeof props === "string") {
+    return {
+      ...initialToast,
+      message: props,
+      ...methods,
+    };
+  }
+  if (typeof props === "function") {
+    return {
+      ...initialToast,
+      message: props({ ...initialToast, ...methods }),
+      ...methods,
+    };
+  }
+  return { ...initialToast, ...props, ...methods };
+};
+
+export const toast = (props: ToastProps, renderer: ToastFN) => {
+  let toastProps = getOptions(props);
+  if (renderer) {
+    toastProps = {
+      ...toastProps,
+      message: renderer(toastProps),
+    };
+  }
   addToast({ ...toastProps })(store.dispatch);
+};
+
+export const makeToast = (toastFn: ToastFN) => {
+  return (props: ToastProps) => {
+    return toast(props, toastFn);
+  };
 };
