@@ -86,7 +86,7 @@ const Toast: React.FC<IToast> = (props) => {
       // onMouseEnter={clearAnimation}
       // onMouseLeave={queueExit}
       onClick={onExit}
-      className={clsx("toast", props.state)}
+      className={clsx("toast-container", props.state)}
       style={{
         animationDuration: `${props.animationDuration}ms`,
         transition: `max-height ${props.animationDuration}ms`,

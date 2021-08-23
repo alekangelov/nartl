@@ -12,7 +12,7 @@
     "start:demo": "cd demo && yarn start",
     "dev": "yarn concurrently 'yarn build --watch' 'yarn start:demo'",
     "tsc": "tsc",
-    "size": "yarn build && node ./getSize.js"
+    "size": "yarn build --omitTypeDeclarations && node ./getSize.js"
   },
   "peerDependencies": {
     "react": ">=16.8",

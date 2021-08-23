@@ -6,28 +6,28 @@
   &.top-left {
     top: 0;
     left: 0;
-    .toast {
+    .toast-container {
       margin-right: auto;
     }
   }
   &.top-right {
     top: 0;
     right: 0;
-    .toast {
+    .toast-container {
       margin-left: auto;
     }
   }
   &.bottom-left {
     bottom: 0;
     left: 0;
-    .toast {
+    .toast-container {
       margin-right: auto;
     }
   }
   &.bottom-right {
     bottom: 0;
     right: 0;
-    .toast {
+    .toast-container {
       margin-left: auto;
     }
   }
@@ -35,7 +35,7 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    .toast {
+    .toast-container {
       margin-left: auto;
       margin-right: auto;
     }
@@ -44,7 +44,7 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    .toast {
+    .toast-container {
       margin-left: auto;
       margin-right: auto;
     }
@@ -53,33 +53,34 @@
 
 .toast {
   // position: absolute;
-  pointer-events: all;
-  width: 300px;
-  max-width: calc(100vw - 6rem);
-  overflow: visible;
-  user-select: none;
+  &-container {
+    pointer-events: all;
+    width: 300px;
+    max-width: calc(100vw - 6rem);
+    overflow: visible;
+    user-select: none;
+    &.entering {
+      animation: entering;
+    }
+    &.none {
+      max-height: 0px;
+      opacity: 0;
+    }
+    &.exiting {
+      animation: exiting;
+      max-height: 0px;
+    }
+  }
   &-message {
     padding: 1rem 2rem;
     box-sizing: content-box;
     background: white;
-  }
-  &.entering {
-    animation: entering;
-  }
-  &.none {
-    max-height: 0px;
-    opacity: 0;
-  }
-  &.exiting {
-    animation: exiting;
-    max-height: 0px;
   }
 }
 
 @keyframes entering {
   0% {
     opacity: 0;
-    transform: translateX(10rem);
   }
   100% {
     opacity: 1;
@@ -94,6 +95,5 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(10rem);
   }
 }

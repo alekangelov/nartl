@@ -26,7 +26,6 @@ export const toast = (props: Partial<Toast> | string) => {
     return { ...initialToast, ...props };
   };
   const toastProps = options();
-  addToast(toastProps)(store.dispatch);
   const close = () => {
     store.dispatch({
       type: ActionType.UPDATE_TOAST,
@@ -39,5 +38,7 @@ export const toast = (props: Partial<Toast> | string) => {
       payload: { id: toastProps.id, ...__toast },
     });
   };
+  addToast({ ...toastProps, close })(store.dispatch);
+
   return { close, update };
 };
